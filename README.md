@@ -28,6 +28,16 @@ docker run --rm my-python-app:test
 
 В GitHub откройте вкладку **Actions** и выберите **Python CI**. Успешный запуск должен содержать четыре зелёные задачи матрицы и зелёную задачу **Build Docker image (no push)**.
 
+## Результат выполнения программы
+
+Приложение запущено командой `python myapp/app.py`. Реальный консольный вывод, полученный при завершении с кодом `0`:
+
+```text
+Hello from my Python app!
+```
+
+Для самостоятельной проверки выполните `python myapp/app.py` из корня репозитория или запустите собранный контейнер командой `docker run --rm my-python-app:test`.
+
 ## Результат выполнения
 
 [Python CI #3](https://github.com/Andrey76546/my-python-app/actions/runs/39559416056) завершён со статусом **Success**: Python `3.10`–`3.13`, `flake8`, `pytest` и сборка Docker-образа прошли успешно (5 из 5 jobs).
