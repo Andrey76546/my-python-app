@@ -38,6 +38,10 @@ Hello from my Python app!
 
 Для самостоятельной проверки выполните `python myapp/app.py` из корня репозитория или запустите собранный контейнер командой `docker run --rm my-python-app:test`.
 
+## Скриншот локального выполнения
+
+![Локальный запуск Python-приложения](screenshots/python-output.png)
+
 ## Результат выполнения
 
 [Python CI #3](https://github.com/Andrey76546/my-python-app/actions/runs/39559416056) завершён со статусом **Success**: Python `3.10`–`3.13`, `flake8`, `pytest` и сборка Docker-образа прошли успешно (5 из 5 jobs).
