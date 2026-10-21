@@ -1,48 +1,43 @@
-# Лабораторная работа 2. Python Pipeline
+# Лабораторная работа 2. Python CI pipeline
 
-## Цель
+## Цель работы
 
-Настроить непрерывную интеграцию Python-приложения: проверку стиля, автоматические тесты в нескольких версиях Python и сборку Docker-образа без публикации.
+Настроить непрерывную интеграцию Python-приложения: проверку стиля, автоматические тесты в нескольких поддерживаемых версиях Python и сборку Docker-образа без публикации.
 
-## Структура
+## Что сделано
 
-- `myapp/app.py` — функция `add()` и точка запуска приложения.
-- `tests/test_app.py` — три теста `pytest`.
-- `requirements.txt` — зависимости для тестирования и линтинга.
-- `setup.py` — установка пакета в режиме разработки.
-- `Dockerfile` — контейнер приложения на Python 3.11.
-- [ci-python.yml](.github/workflows/ci-python.yml) — workflow GitHub Actions.
+- Workflow [`ci-python.yml`](.github/workflows/ci-python.yml) запускается для `push`, `pull_request` и вручную.
+- Матрица проверяет Python `3.10`, `3.11`, `3.12` и `3.13` на `ubuntu-24.04`.
+- Для каждой версии выполняются `flake8` и три теста `pytest`.
+- После успешного завершения всей матрицы отдельная задача собирает Docker-образ.
+- Docker job выполняется при любом поддерживаемом типе запуска и не пропускается из-за фильтра события.
+- В Dockerfile используется Python `3.12-slim`; образ собирается только для проверки и не публикуется.
 
-## Локальная проверка
+## Как запускать / проверять
+
+Локальная проверка:
 
 ```bash
 python -m pip install -r requirements.txt
 python -m pip install -e .
 flake8 myapp tests setup.py --count --max-line-length=127 --statistics
 pytest tests/
-```
-
-Ожидаемый результат: три успешно пройденных теста и отсутствие ошибок `flake8`.
-
-Локальная проверка выполнена успешно: `flake8` завершился с кодом `0`, все три теста `pytest` пройдены на Python 3.12.
-
-## Docker
-
-```bash
 docker build -t my-python-app:test .
 docker run --rm my-python-app:test
 ```
 
-Контейнер выводит `Hello from my Python app!`. Образ собирается только для проверки и никуда не публикуется.
+В GitHub откройте вкладку **Actions** и выберите **Python CI**. Успешный запуск должен содержать четыре зелёные задачи матрицы и зелёную задачу **Build Docker image (no push)**.
 
-Локальная сборка и запуск контейнера завершились успешно; ожидаемое сообщение получено.
+## Результат выполнения
 
-## CI
+[Python CI #3](https://github.com/Andrey76546/my-python-app/actions/runs/39559416056) завершён со статусом **Success**: Python `3.10`–`3.13`, `flake8`, `pytest` и сборка Docker-образа прошли успешно (5 из 5 jobs).
 
-Workflow проверяет проект на Python 3.9, 3.10, 3.11 и 3.12. После успешного линтинга и тестов отдельная задача собирает Docker-образ. Результаты доступны на странице [Python CI](https://github.com/Andrey76546/my-python-app/actions/workflows/ci-python.yml).
+## Скриншот
 
-## Скриншот выполнения
+![Успешный запуск Python CI с матрицей и Docker build](screenshots/python-ci.png)
 
-[Запуск Python CI #1](https://github.com/Andrey76546/my-python-app/actions/runs/39518809259) завершён успешно: пройдены четыре задания матрицы Python и сборка Docker-образа.
+## Ссылка на workflow / Actions
 
-![Успешный запуск Python CI](screenshots/actions-success.png)
+- [Файл workflow](.github/workflows/ci-python.yml)
+- [Все запуски Python CI](https://github.com/Andrey76546/my-python-app/actions/workflows/ci-python.yml)
+- [Подтверждённый успешный запуск](https://github.com/Andrey76546/my-python-app/actions/runs/39559416056)
